@@ -120,3 +120,6 @@ USE_TZ = False #본인 컴퓨터에 맞게 나올 수 있도록 한다.
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '_media')

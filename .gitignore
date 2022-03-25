@@ -136,3 +136,6 @@ dmypy.json
 
 # Django files
 migrations/
+
+# image files
+_media/
