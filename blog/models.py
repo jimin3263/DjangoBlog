@@ -12,14 +12,28 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return f'/blog/category/{self.slug}/'
+
     class Meta:
         verbose_name_plural = 'Categories'
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return f'/blog/tag/{self.slug}/'
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
     content = models.TextField()
     hook = models.TextField(null=True)
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
+    tag = models.ManyToManyField(Tag, blank=True)
 
     head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank=True)
     attached_file = models.FileField(upload_to='blog/files/%Y/%m/%d/', blank= True)

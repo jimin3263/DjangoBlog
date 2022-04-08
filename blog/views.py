@@ -1,16 +1,30 @@
-
-
 # Create your views here.
+from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
-from blog.models import Post
+from blog.models import Post, Category
+
 
 class PostList(ListView):
     model = Post
     ordering = '-pk'
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PostList, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+
+        return context
+
 class PostDetail(DetailView):
     model = Post
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(PostDetail, self).get_context_data()
+        context['categories'] = Category.objects.all()
+        context['no_category_post_count'] = Post.objects.filter(category=None).count()
+
+        return context
 
 # def index(request):
 #     posts = Post.objects.all().order_by('-pk')
@@ -33,3 +47,20 @@ class PostDetail(DetailView):
 #             'post': post,
 #         }
 #     )
+def show_category_post(request, slug):
+
+    if slug == 'no-category':
+        category = "미분류"
+        post_list = Post.objects.filter(category=None)
+    else:
+        category = Category.objects.get(slug=slug)
+        post_list = Post.objects.filter(category=category)
+
+    context = {
+        'categories' : Category.objects.all(),
+        'category_less_post_count' : Post.objects.filter(category=None).count(),
+        'category': category,
+        'post_list': post_list
+    }
+
+    return render(request, 'blog/post_list.html', context)
