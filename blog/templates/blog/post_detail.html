@@ -37,6 +37,16 @@
       {% endif %}
         <hr>
 
+      {% if post.tag.exists %}
+        <br />
+        <i class = "fas fa-tags"></i>
+        {% for tag in post.tag.iterator %}
+            <a href = {{ tag.get_absolute_url }}> {{ tag }}</a>
+        {% endfor %}
+        <br />
+        <br />
+      {% endif %}
+
         <!-- Comments Form -->
         <div class="card my-4">
           <h5 class="card-header">Leave a Comment:</h5>
