@@ -25,3 +25,10 @@ class Post(models.Model):
 
     def get_file_name(self):
         return os.path.basename(self.attached_file.name)
+
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
+
+    def __str__(self):
+        return self.name
