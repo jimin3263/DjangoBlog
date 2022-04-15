@@ -1,7 +1,8 @@
 # Create your views here.
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 
 from blog.models import Post, Category, Tag
 
@@ -96,3 +97,15 @@ class PostCreate(LoginRequiredMixin, CreateView, UserPassesTestMixin):
             return super(PostCreate, self).form_valid(form)
         else:
             return redirect('/blog/')
+
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post
+    fields = ['title', 'hook', "content", "head_image", "attached_file", "category"]
+
+    template_name = 'blog/post_form_update.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if(request.user.is_authenticated and request.user == self.get_object().author):
+            return super(PostUpdate, self).dispatch(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
