@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, CreateView
 
 from blog.models import Post, Category, Tag
 
@@ -47,6 +47,7 @@ class PostDetail(DetailView):
 #             'post': post,
 #         }
 #     )
+
 def show_category_post(request, slug):
 
     if slug == 'no-category':
@@ -78,3 +79,7 @@ def show_tag_post(request, slug):
     }
 
     return render(request, 'blog/post_list.html', context)
+
+class PostCreate(CreateView):
+    model = Post
+    fields = ['title', 'hook', "content", "head_image", "attached_file", "category"] #입력받을 요소들
