@@ -41,7 +41,7 @@ class Post(models.Model):
     head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank=True)
     attached_file = models.FileField(upload_to='blog/files/%Y/%m/%d/', blank= True)
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,10 +49,23 @@ class Post(models.Model):
         return f'[{self.pk}]{self.title} :: {self.author}'
 
     def get_absolute_url(self):
-        return f'/blog/{self.pk}'
+        return f'/blog/{self.pk}/'
 
     def get_file_name(self):
         return os.path.basename(self.attached_file.name)
 
     def get_content_markdown(self):
         return markdown(self.content)
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.author}::{self.content}'
+
+    def get_absolute_url(self):
+        return f'{self.post.get_absolute_url()}#comment-{self.pk}'
