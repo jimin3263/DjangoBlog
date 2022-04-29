@@ -5,4 +5,15 @@
 
 {% block main_area %}
     <h2> 짐인 </h2>
+    {% for recent_post in recent_posts %}
+        <div>
+            <h6>
+                <a href="{{ recent_post.get_absolute_url }}">
+                    {{ recent_post.title }} by {{ recent_post.author.username }}
+                </a>
+            </h6>
+        <p> {{ recent_post.get_content_markdown | truncatewords_html:30 | safe}}</p>
+        </div>
+    {% endfor %}
+
 {% endblock %}
