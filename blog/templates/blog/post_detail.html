@@ -35,13 +35,15 @@
         <!-- Preview Image -->
           {% if post.head_image %}
               <img class="img-fluid rounded" src="{{ post.head_image.url }}" alt="">
+          {% else %}
+              <img class="card-img-top" src="https://picsum.photos/800/200" alt="Card image cap">
           {% endif %}
 
 
         <hr>
 
         <!-- Post Content -->
-        <p>{{ post.content }}</p>
+        <p>{{ post.get_content_markdown | safe }}</p>
       {%if post.attached_file  %}
             <a href="{{ post.attached_file.url }}" type="button" class="btn btn-outline-info" download="true">첨부 파일 다운로드</a>
           {{ post.get_file_name }}
