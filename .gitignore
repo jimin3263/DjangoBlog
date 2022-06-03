@@ -140,3 +140,5 @@ migrations/
 
 # image files
 _media/
+
+static
